@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'screens/login_screen.dart';
+import 'services/auth_service.dart';
 
 void main() {
   runApp(const LectulandApp());
@@ -34,7 +36,7 @@ class LectulandApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const WelcomeScreen(),
+      home: LoginScreen(authService: AuthService()),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -99,7 +101,7 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   // Lema principal
                   const Text(
-                    '"Una biblioteca al alcance de tu mano"',
+                    '"Cada libro, una aventura. Cada reseña, un legado"',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -124,7 +126,7 @@ class WelcomeScreen extends StatelessWidget {
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('📖 Bienvenido a Lectuland. Próximamente: tu biblioteca personal'),
+                          content: Text('📖 Bienvenido a Lectuland. Donde tus reseñas viven'),
                           duration: Duration(seconds: 2),
                           backgroundColor: Color(0xFF5D4037),
                         ),
