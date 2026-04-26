@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'register_screen.dart';
-import 'home_screen.dart'; // La crearemos después
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final AuthService authService;
-  
+
   const LoginScreen({super.key, required this.authService});
 
   @override
@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _usernameController.text.trim(),
         _passwordController.text,
       );
-      
+
       if (success) {
         Navigator.pushReplacement(
           context,
@@ -33,10 +33,17 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('❌ Usuario o contraseña incorrectos')),
+          const SnackBar(content: Text('Usuario o contraseña incorrectos')),
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override

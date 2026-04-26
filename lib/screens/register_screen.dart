@@ -3,7 +3,7 @@ import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   final AuthService authService;
-  
+
   const RegisterScreen({super.key, required this.authService});
 
   @override
@@ -22,18 +22,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _usernameController.text.trim(),
         _passwordController.text,
       );
-      
+
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('✅ ¡Registro exitoso! Ahora inicia sesión')),
+          const SnackBar(
+            content: Text('¡Registro exitoso! Ahora inicia sesión'),
+          ),
         );
-        Navigator.pop(context); // Volver a pantalla de login
+        Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('❌ Usuario ya existe o contraseña muy corta')),
+          const SnackBar(
+            content: Text('Usuario ya existe o contraseña muy corta'),
+          ),
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 
   @override

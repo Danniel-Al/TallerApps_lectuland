@@ -9,7 +9,7 @@ class StarRating extends StatelessWidget {
     super.key,
     required this.rating,
     required this.onRatingChanged,
-    this.size = 40, // Aumentado de 30 a 40
+    this.size = 35,
   });
 
   @override
@@ -21,8 +21,8 @@ class StarRating extends StatelessWidget {
         return GestureDetector(
           onTap: () => onRatingChanged(starIndex.toDouble()),
           onLongPress: () => onRatingChanged(starIndex - 0.5),
-          child: Container(
-            padding: const EdgeInsets.all(4),
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
             child: Icon(
               _getStarIcon(starIndex),
               color: Colors.amber,

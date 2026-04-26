@@ -12,16 +12,13 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
-  // Cambiado: reseñaController -> resenaController (sin ñ)
   final TextEditingController _resenaController = TextEditingController();
-  
-  // Personajes
+
   final List<String> _personajesFavoritos = [];
   final List<String> _personajesOdiados = [];
   final TextEditingController _nuevoPersonajeFav = TextEditingController();
   final TextEditingController _nuevoPersonajeOdiado = TextEditingController();
 
-  // Calificaciones emocionales
   double _amor = 0;
   double _gracioso = 0;
   double _enojo = 0;
@@ -33,7 +30,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
   double _asesinato = 0;
   double _finalLibro = 0;
 
-  // Frases favoritas
   final List<String> _frasesFavoritas = [];
   final TextEditingController _nuevaFrase = TextEditingController();
 
@@ -66,7 +62,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   void _guardarReview() {
     final review = Review(
-      resena: _resenaController.text, // Cambiado
+      resena: _resenaController.text,
       personajesFavoritos: _personajesFavoritos,
       personajesOdiados: _personajesOdiados,
       amor: _amor,
@@ -83,6 +79,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
     widget.onReviewComplete(review);
     Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    _resenaController.dispose();
+    _nuevoPersonajeFav.dispose();
+    _nuevoPersonajeOdiado.dispose();
+    _nuevaFrase.dispose();
+    super.dispose();
   }
 
   @override
@@ -106,9 +111,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Campo de resena larga
               const Text(
-                'Resena del Libro', // Sin tilde
+                'Review del Libro',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -121,14 +125,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 maxLines: null,
                 minLines: 5,
                 decoration: const InputDecoration(
-                  hintText: 'Escribe tu resena aqui... (sin limite de caracteres)',
+                  hintText: 'Escribe tu review aqui... (sin limite de caracteres)',
                   border: OutlineInputBorder(),
                   alignLabelWithHint: true,
                 ),
               ),
               const SizedBox(height: 24),
-
-              // Personajes Favoritos
               _buildPersonajesSection(
                 titulo: 'Personajes Favoritos',
                 personajes: _personajesFavoritos,
@@ -137,8 +139,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 icon: Icons.favorite,
               ),
               const SizedBox(height: 24),
-
-              // Personajes Odiados
               _buildPersonajesSection(
                 titulo: 'Personajes Odiados',
                 personajes: _personajesOdiados,
@@ -148,8 +148,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 color: Colors.red,
               ),
               const SizedBox(height: 24),
-
-              // Calificaciones emocionales
               const Text(
                 'Calificaciones del Libro',
                 style: TextStyle(
@@ -159,7 +157,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
               _buildEmotionRating('Amor', _amor, (v) => setState(() => _amor = v)),
               _buildEmotionRating('Gracioso', _gracioso, (v) => setState(() => _gracioso = v)),
               _buildEmotionRating('Enojo', _enojo, (v) => setState(() => _enojo = v)),
@@ -171,8 +168,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
               _buildEmotionRating('Asesinato', _asesinato, (v) => setState(() => _asesinato = v)),
               _buildEmotionRating('Final', _finalLibro, (v) => setState(() => _finalLibro = v)),
               const SizedBox(height: 24),
-
-              // Frases favoritas
               const Text(
                 'Frases Favoritas',
                 style: TextStyle(
@@ -202,22 +197,21 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
               const SizedBox(height: 8),
               ..._frasesFavoritas.map((frase) => Card(
-                margin: const EdgeInsets.only(top: 8),
-                child: ListTile(
-                  leading: const Icon(Icons.format_quote),
-                  title: Text(frase),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      setState(() {
-                        _frasesFavoritas.remove(frase);
-                      });
-                    },
-                  ),
-                ),
-              )),
+                    margin: const EdgeInsets.only(top: 8),
+                    child: ListTile(
+                      leading: const Icon(Icons.format_quote),
+                      title: Text(frase),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            _frasesFavoritas.remove(frase);
+                          });
+                        },
+                      ),
+                    ),
+                  )),
               const SizedBox(height: 30),
-
               ElevatedButton(
                 onPressed: _guardarReview,
                 style: ElevatedButton.styleFrom(
@@ -283,14 +277,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
           spacing: 8,
           runSpacing: 8,
           children: personajes.map((p) => Chip(
-            label: Text(p),
-            avatar: Icon(icon, size: 18, color: color),
-            onDeleted: () {
-              setState(() {
-                personajes.remove(p);
-              });
-            },
-          )).toList(),
+                label: Text(p),
+                avatar: Icon(icon, size: 18, color: color),
+                onDeleted: () {
+                  setState(() {
+                    personajes.remove(p);
+                  });
+                },
+              )).toList(),
         ),
       ],
     );
