@@ -11,10 +11,43 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+  List<Book> _librosFiltrados = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarLibros();
+  }
+
+  void _cargarLibros() {
+    setState(() {
+      _librosFiltrados = BookService.getBooks();
+    });
+  }
+
+  void _filtrarLibros(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _librosFiltrados = BookService.getBooks();
+      } else {
+        _librosFiltrados = BookService.getBooks().where((libro) {
+          return libro.titulo.toLowerCase().contains(query.toLowerCase());
+        }).toList();
+      }
+    });
+  }
+
+  int get _librosLeidos => BookService.getBooks().length;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final libros = BookService.getBooks();
-
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -23,56 +56,163 @@ class _LibraryScreenState extends State<LibraryScreen> {
           colors: [Color(0xFFF5F0E6), Color(0xFFE8DCC8)],
         ),
       ),
-      child: libros.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.library_books,
-                    size: 80,
-                    color: Color(0xFF8D6E63),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Tu biblioteca está vacía',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF5D4037),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Agrega tu primer libro desde la pestaña "Agregar"',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF8D6E63),
-                    ),
-                  ),
-                ],
+      child: Column(
+        children: [
+          // Header con contador y búsqueda
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF5D4037).withValues(alpha: 0.1),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
               ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: libros.length,
-              itemBuilder: (context, index) {
-                final libro = libros[index];
-                return _buildBookCard(libro);
-              },
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Contador de libros
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Mi Biblioteca',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF5D4037),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF558B2F),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.menu_book, size: 16, color: Colors.white),
+                          const SizedBox(width: 6),
+                          Text(
+                            '$_librosLeidos ${_librosLeidos == 1 ? 'libro' : 'libros'}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Barra de búsqueda
+                TextField(
+                  controller: _searchController,
+                  onChanged: _filtrarLibros,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar por título del libro...',
+                    prefixIcon: const Icon(Icons.search, color: Color(0xFF8D6E63)),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear, color: Color(0xFF8D6E63)),
+                            onPressed: () {
+                              _searchController.clear();
+                              _filtrarLibros('');
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: const BorderSide(color: Color(0xFF558B2F), width: 1.5),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Lista de libros
+          Expanded(
+            child: _librosFiltrados.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _searchController.text.isEmpty
+                              ? Icons.library_books
+                              : Icons.search_off,
+                          size: 80,
+                          color: Color(0xFF8D6E63),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          _searchController.text.isEmpty
+                              ? 'Tu biblioteca está vacía'
+                              : 'No se encontraron resultados',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF5D4037),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        if (_searchController.text.isEmpty)
+                          const Text(
+                            'Agrega tu primer libro desde la pestaña "Agregar"',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF8D6E63),
+                            ),
+                          ),
+                        if (_searchController.text.isNotEmpty)
+                          TextButton(
+                            onPressed: () {
+                              _searchController.clear();
+                              _filtrarLibros('');
+                            },
+                            child: const Text('Limpiar búsqueda'),
+                          ),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _librosFiltrados.length,
+                    itemBuilder: (context, index) {
+                      final libro = _librosFiltrados[index];
+                      return _buildBookCard(libro);
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildBookCard(Book libro) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => BookDetailScreen(book: libro),
           ),
         );
+        // Recargar la lista al volver (por si se eliminó algún libro)
+        _cargarLibros();
+        _filtrarLibros(_searchController.text);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
