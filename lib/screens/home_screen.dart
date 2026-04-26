@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
+import 'add_book_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,7 +16,6 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Cerrar sesión: volver a la pantalla de login
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -56,8 +56,26 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                'Próximamente: tus libros, reseñas y calificaciones',
+                'Comienza a registrar tus lecturas',
                 style: TextStyle(fontSize: 16, color: Color(0xFF8D6E63)),
+              ),
+              const SizedBox(height: 40),
+              // Botón para agregar libro
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddBookScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('AGREGAR LIBRO'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF558B2F),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                ),
               ),
             ],
           ),
