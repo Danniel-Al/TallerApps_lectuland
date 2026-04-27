@@ -1,22 +1,23 @@
+//Importación de materiales de diseño como iconos, color
 import 'package:flutter/material.dart';
 
-class Book {
-  final String id;
-  final String titulo;
-  final String autor;
-  final String? imagenUrl;
-  final TipoLibro tipo;
-  final int paginas;
-  final String idioma;
-  final double calificacion;
-  final DateTime fechaInicio;
-  final DateTime fechaFin;
-  final String generoLiterario;
-  final TipoSerie tipoSerie;
-  final Review review;
-  final EstadoLectura estadoLectura;
+class Book { // Definir el tipo de datos de las variables para hacer reseña
+  final String id; //Identificador del libro
+  final String titulo; //Nombre del liro
+  final String autor; //Nombre del autor
+  final String? imagenUrl; //Dirección web de la portada (opcional)
+  final TipoLibro tipo; //Formato libro (opción multiple)
+  final int paginas; //Número de páginas
+  final String idioma; //Idioma del libro
+  final double calificacion; //Puntuación del libro
+  final DateTime fechaInicio; //Día que se empezó a leer el libro
+  final DateTime fechaFin; // Día que se terminó de leer el libro
+  final String generoLiterario; //Categoría del libro
+  final TipoSerie tipoSerie; //Tipo de serie (opción multiple)
+  final Review review; //Contenido de reseña 
+  final EstadoLectura estadoLectura; //Estado de lectura (opción multiple)
 
-  Book({
+  Book({ // Parámetros nombrados al crear un libro
     required this.id,
     required this.titulo,
     required this.autor,
@@ -24,35 +25,35 @@ class Book {
     required this.tipo,
     required this.paginas,
     required this.idioma,
-    this.calificacion = 0,
+    this.calificacion = 0, //Valor por defecto "0"
     required this.fechaInicio,
     required this.fechaFin,
     required this.generoLiterario,
     required this.tipoSerie,
     required this.review,
-    this.estadoLectura = EstadoLectura.leido,
+    this.estadoLectura = EstadoLectura.leido, //Valor por defecto será "Leído"
   });
 }
 
 class Review {
-  final String resena;
-  final List<String> personajesFavoritos;
-  final List<String> personajesOdiados;
-  final double amor;
-  final double gracioso;
-  final double enojo;
-  final double tristeza;
-  final double fantasia;
-  final double reflexion;
-  final double spicy;
-  final double trama;
-  final double asesinato;
-  final double finalLibro;
-  final List<String> frasesFavoritas;
+  final String resena; //Texto largo con la reseña del libro 
+  final List<String> personajesFavoritos; // Lista de personajes favoritos
+  final List<String> personajesOdiados; //Lista de personajes odiados
+  final double amor; //Calificación de 0 a 5 respecto a romance
+  final double gracioso; //Calificación de 0 a 5 respecto a humor
+  final double enojo; //Calificación de 0 a 5 respecto al enojo que provocó
+  final double tristeza; //Calificación de 0 a 5 respecto a lo triste que es
+  final double fantasia; //Calificación de 0 a 5 respecto a los elementos fantásticos
+  final double reflexion; //Calificación de 0 a 5 respecto a lo que te hizo pensar
+  final double spicy; //Calificación de 0 a 5 respecto al contenido adulto
+  final double trama; //Calificación de 0 a 5 respecto a la historia
+  final double asesinato; //Calificación de 0 a 5 respecto a la violencia
+  final double finalLibro; //Lista de frases destacadas al desenlace
+  final List<String> frasesFavoritas; //Lista de frases destacadas
 
-  Review({
+  Review({ //Valores por defectos
     this.resena = '',
-    this.personajesFavoritos = const [],
+    this.personajesFavoritos = const [], //Lista vacía
     this.personajesOdiados = const [],
     this.amor = 0,
     this.gracioso = 0,
@@ -68,13 +69,13 @@ class Review {
   });
 }
 
-enum EstadoLectura {
+enum EstadoLectura { //Lista de opciones para identicicar el estado de lectura
   porLeer,
   leyendo,
   leido;
 
   @override
-  String toString() {
+  String toString() { //Se reemplaa el método por defecto para devolver el texto con emojis
     switch (this) {
       case EstadoLectura.porLeer:
         return '📖 Por leer';
@@ -85,8 +86,8 @@ enum EstadoLectura {
     }
   }
 
-  IconData get icon {
-    switch (this) {
+  IconData get icon { //Se crea propiedad al usar el icono
+    switch (this) { //cada estado tiene un ícono diferente
       case EstadoLectura.porLeer:
         return Icons.bookmark_border;
       case EstadoLectura.leyendo:
@@ -96,7 +97,7 @@ enum EstadoLectura {
     }
   }
 
-  Color get color {
+  Color get color { //Se crea propiedad para devolver un color según el estado de la lectura
     switch (this) {
       case EstadoLectura.porLeer:
         return Colors.orange;
@@ -108,13 +109,13 @@ enum EstadoLectura {
   }
 }
 
-enum TipoLibro {
+enum TipoLibro { //Tres  formatos posibles del tipo de libro
   electronico,
   tapaDura,
   tapaBlanda;
 
   @override
-  String toString() {
+  String toString() { //Convierte cada opción a un texto legible
     switch (this) {
       case TipoLibro.electronico:
         return 'Electronico';
@@ -126,7 +127,7 @@ enum TipoLibro {
   }
 }
 
-enum TipoSerie {
+enum TipoSerie { //Convierte cada opción en un texto legible
   autoconclusivo,
   saga,
   bilogia,
