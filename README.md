@@ -4,9 +4,9 @@ Aplicación móvil desarrollada con flutter que permite dar seguimiento a los li
 
 ## Funcionalidades
 
-**Autenticación de usuarios**
-**Agregar libros**
-**Reseñas detalladas**
-**Biblioteca**
-**Editar libros y reseñas**
+**Autenticación de usuarios** (registro e inicio de sesión)  
+**Agregar libros** con título, autor, género, tipo, páginas, idioma  
+**Reseñas detalladas** con calificaciones emocionales  
+**Biblioteca** con contador y búsqueda  
+**Editar libros y reseñas**  
 **Eliminar libros**
