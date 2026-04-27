@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../services/book_service.dart';
@@ -25,6 +23,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   DateTime _fechaInicio = DateTime.now();
   DateTime _fechaFin = DateTime.now();
   TipoSerie _tipoSerieSeleccionado = TipoSerie.autoconclusivo;
+  EstadoLectura _estadoLecturaSeleccionado = EstadoLectura.leido;
   double _calificacion = 0;
   String? _imagenUrl;
 
@@ -41,6 +40,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
       _fechaInicio = DateTime.now();
       _fechaFin = DateTime.now();
       _tipoSerieSeleccionado = TipoSerie.autoconclusivo;
+      _estadoLecturaSeleccionado = EstadoLectura.leido;
       _calificacion = 0;
       _imagenUrl = null;
       _reviewGuardado = null;
@@ -73,6 +73,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
         generoLiterario: _generoController.text.trim(),
         tipoSerie: _tipoSerieSeleccionado,
         review: _reviewGuardado!,
+        estadoLectura: _estadoLecturaSeleccionado,
       );
 
       BookService.addBook(nuevoLibro);
@@ -86,7 +87,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
         ),
       );
 
-      // Volver a la pantalla principal y cambiar a biblioteca
+      // Volver a la pantalla principal
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
@@ -143,6 +144,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 20),
 
+              // Título
               TextFormField(
                 controller: _tituloController,
                 decoration: const InputDecoration(
@@ -159,6 +161,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Autor
               TextFormField(
                 controller: _autorController,
                 decoration: const InputDecoration(
@@ -175,6 +178,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Tipo de libro
               DropdownButtonFormField<TipoLibro>(
                 decoration: const InputDecoration(
                   labelText: 'Tipo de libro',
@@ -196,6 +200,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Número de páginas
               TextFormField(
                 controller: _paginasController,
                 decoration: const InputDecoration(
@@ -216,6 +221,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Idioma
               TextFormField(
                 controller: _idiomaController,
                 decoration: const InputDecoration(
@@ -233,6 +239,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Género literario
               TextFormField(
                 controller: _generoController,
                 decoration: const InputDecoration(
@@ -250,6 +257,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Tipo de serie
               DropdownButtonFormField<TipoSerie>(
                 decoration: const InputDecoration(
                   labelText: 'Tipo de serie/libro',
@@ -271,6 +279,35 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Estado de lectura (NUEVO)
+              DropdownButtonFormField<EstadoLectura>(
+                decoration: const InputDecoration(
+                  labelText: 'Estado de lectura',
+                  prefixIcon: Icon(Icons.bookmark),
+                  border: OutlineInputBorder(),
+                ),
+                value: _estadoLecturaSeleccionado,
+                items: EstadoLectura.values.map((estado) {
+                  return DropdownMenuItem<EstadoLectura>(
+                    value: estado,
+                    child: Row(
+                      children: [
+                        Icon(estado.icon, size: 18, color: estado.color),
+                        const SizedBox(width: 8),
+                        Text(estado.toString()),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onChanged: (EstadoLectura? newValue) {
+                  setState(() {
+                    _estadoLecturaSeleccionado = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Fecha inicio
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.play_arrow, color: Color(0xFF5D4037)),
@@ -294,6 +331,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 8),
 
+              // Fecha fin
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.check_circle, color: Color(0xFF5D4037)),
@@ -317,6 +355,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Calificación
               const Text(
                 'Calificacion general (1-5)',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -337,6 +376,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 16),
 
+              // URL portada
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'URL de la portada (opcional)',
@@ -350,6 +390,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
               ),
               const SizedBox(height: 20),
 
+              // Botón para review
               ElevatedButton.icon(
                 onPressed: _abrirReview,
                 icon: const Icon(Icons.rate_review),
@@ -373,6 +414,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
 
               const SizedBox(height: 20),
 
+              // Botón guardar
               ElevatedButton(
                 onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(
