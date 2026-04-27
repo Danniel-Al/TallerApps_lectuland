@@ -7,6 +7,13 @@ class BookService {
     _libros.add(libro);
   }
 
+  static void updateBook(Book libroActualizado) {
+    final index = _libros.indexWhere((book) => book.id == libroActualizado.id);
+    if (index != -1) {
+      _libros[index] = libroActualizado;
+    }
+  }
+
   static List<Book> getBooks() {
     return List.from(_libros);
   }

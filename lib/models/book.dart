@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Book {
   final String id;
   final String titulo;
@@ -12,6 +14,7 @@ class Book {
   final String generoLiterario;
   final TipoSerie tipoSerie;
   final Review review;
+  final EstadoLectura estadoLectura;
 
   Book({
     required this.id,
@@ -27,6 +30,7 @@ class Book {
     required this.generoLiterario,
     required this.tipoSerie,
     required this.review,
+    this.estadoLectura = EstadoLectura.leido,
   });
 }
 
@@ -62,6 +66,46 @@ class Review {
     this.finalLibro = 0,
     this.frasesFavoritas = const [],
   });
+}
+
+enum EstadoLectura {
+  porLeer,
+  leyendo,
+  leido;
+
+  @override
+  String toString() {
+    switch (this) {
+      case EstadoLectura.porLeer:
+        return '📖 Por leer';
+      case EstadoLectura.leyendo:
+        return '📚 Leyendo';
+      case EstadoLectura.leido:
+        return '✅ Leído';
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case EstadoLectura.porLeer:
+        return Icons.bookmark_border;
+      case EstadoLectura.leyendo:
+        return Icons.book;
+      case EstadoLectura.leido:
+        return Icons.check_circle;
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case EstadoLectura.porLeer:
+        return Colors.orange;
+      case EstadoLectura.leyendo:
+        return Colors.blue;
+      case EstadoLectura.leido:
+        return Colors.green;
+    }
+  }
 }
 
 enum TipoLibro {

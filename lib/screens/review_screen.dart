@@ -4,34 +4,58 @@ import '../widgets/star_rating.dart';
 
 class ReviewScreen extends StatefulWidget {
   final Function(Review) onReviewComplete;
+  final Review? existingReview;
 
-  const ReviewScreen({super.key, required this.onReviewComplete});
+  const ReviewScreen({
+    super.key,
+    required this.onReviewComplete,
+    this.existingReview,
+  });
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
-  final TextEditingController _resenaController = TextEditingController();
+  late final TextEditingController _resenaController;
 
-  final List<String> _personajesFavoritos = [];
-  final List<String> _personajesOdiados = [];
+  late List<String> _personajesFavoritos;
+  late List<String> _personajesOdiados;
   final TextEditingController _nuevoPersonajeFav = TextEditingController();
   final TextEditingController _nuevoPersonajeOdiado = TextEditingController();
 
-  double _amor = 0;
-  double _gracioso = 0;
-  double _enojo = 0;
-  double _tristeza = 0;
-  double _fantasia = 0;
-  double _reflexion = 0;
-  double _spicy = 0;
-  double _trama = 0;
-  double _asesinato = 0;
-  double _finalLibro = 0;
+  late double _amor;
+  late double _gracioso;
+  late double _enojo;
+  late double _tristeza;
+  late double _fantasia;
+  late double _reflexion;
+  late double _spicy;
+  late double _trama;
+  late double _asesinato;
+  late double _finalLibro;
 
-  final List<String> _frasesFavoritas = [];
+  late List<String> _frasesFavoritas;
   final TextEditingController _nuevaFrase = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _resenaController = TextEditingController(text: widget.existingReview?.resena ?? '');
+    _personajesFavoritos = List.from(widget.existingReview?.personajesFavoritos ?? []);
+    _personajesOdiados = List.from(widget.existingReview?.personajesOdiados ?? []);
+    _amor = widget.existingReview?.amor ?? 0;
+    _gracioso = widget.existingReview?.gracioso ?? 0;
+    _enojo = widget.existingReview?.enojo ?? 0;
+    _tristeza = widget.existingReview?.tristeza ?? 0;
+    _fantasia = widget.existingReview?.fantasia ?? 0;
+    _reflexion = widget.existingReview?.reflexion ?? 0;
+    _spicy = widget.existingReview?.spicy ?? 0;
+    _trama = widget.existingReview?.trama ?? 0;
+    _asesinato = widget.existingReview?.asesinato ?? 0;
+    _finalLibro = widget.existingReview?.finalLibro ?? 0;
+    _frasesFavoritas = List.from(widget.existingReview?.frasesFavoritas ?? []);
+  }
 
   void _agregarPersonajeFav() {
     if (_nuevoPersonajeFav.text.isNotEmpty) {

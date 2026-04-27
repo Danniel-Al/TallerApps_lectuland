@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../services/book_service.dart';
+import 'edit_book_screen.dart';
 
 class BookDetailScreen extends StatelessWidget {
   final Book book;
@@ -38,6 +39,18 @@ class BookDetailScreen extends StatelessWidget {
     );
   }
 
+  void _editarLibro(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditBookScreen(book: book),
+      ),
+    );
+    if (result == true) {
+      Navigator.pop(context, true);
+    }
+  }
+
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
   }
@@ -50,6 +63,12 @@ class BookDetailScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF5D4037),
         centerTitle: true,
         actions: [
+          // Botón editar
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () => _editarLibro(context),
+          ),
+          // Botón eliminar
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.white),
             onPressed: () => _confirmDelete(context),
@@ -69,6 +88,31 @@ class BookDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Estado de lectura
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: book.estadoLectura.color.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(book.estadoLectura.icon, size: 16, color: book.estadoLectura.color),
+                    const SizedBox(width: 6),
+                    Text(
+                      book.estadoLectura.toString(),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: book.estadoLectura.color,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,7 +186,7 @@ class BookDetailScreen extends StatelessWidget {
                             );
                           }),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
@@ -197,8 +241,8 @@ class BookDetailScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              _buildInfoRow('Fecha inicio', _formatDate(book.fechaInicio)),
-              _buildInfoRow('Fecha fin', _formatDate(book.fechaFin)),
+              _buildInfoRow('Inicio de lectura', _formatDate(book.fechaInicio)),
+              _buildInfoRow('Fin de lectura', _formatDate(book.fechaFin)),
               _buildInfoRow('Género', book.generoLiterario),
               _buildInfoRow('Tipo de serie', book.tipoSerie.toString()),
               _buildInfoRow('Tipo de libro', book.tipo.toString()),
