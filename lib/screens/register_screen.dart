@@ -1,28 +1,36 @@
-import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+//Importa bibliotecas
+import 'package:flutter/material.dart'; //Diseño visual de flutter
+import '../services/auth_service.dart'; //Servicio que maneja el servicio de usuario
 
+//Pantalla de registro denuevos usuarios
 class RegisterScreen extends StatefulWidget {
-  final AuthService authService;
+  final AuthService authService;   //Recibe servicio de autenticación desde pantalla de login
 
   const RegisterScreen({super.key, required this.authService});
 
+  //Se crea el objeto que maneja el estado de esta pantalla
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  //Almacenamiento de valores que cambian 
+
+  final _formKey = GlobalKey<FormState>(); //Clave del formulario para validar todos los campos a la vez
+  //Controladores de texto
+  final _usernameController = TextEditingController(); 
+  final _passwordController = TextEditingController(); 
   final _confirmPasswordController = TextEditingController();
 
   void _register() {
+    //Validar si el formulario esta completo
     if (_formKey.currentState!.validate()) {
       final success = widget.authService.register(
         _usernameController.text.trim(),
         _passwordController.text,
       );
 
+      //Intentar registrar al usuario
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -31,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         Navigator.pop(context);
       } else {
+        //Se muestra mensaje de error
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Usuario ya existe o contraseña muy corta'),
@@ -42,6 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    //Libera cada controlador de texto
     _usernameController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -49,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
+  //Interfaz visual de la pantalla
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -126,6 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 const SizedBox(height: 30),
+                //Boton principal para registrarse
                 ElevatedButton(
                   onPressed: _register,
                   style: ElevatedButton.styleFrom(
@@ -133,6 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   child: const Text('REGISTRARSE'),
                 ),
+                //Boton secundario para volver a la página de login
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: const Text('¿Ya tienes cuenta? Inicia sesión'),
