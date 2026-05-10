@@ -68,7 +68,7 @@ Desde esta pantalla también se puede:
 La edición permite corregir errores o actualizar la opinión del libro después de haberlo terminado o reflexionado más tiempo.
 
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - **Flutter (Dart)** – Framework para desarrollo multiplataforma.
 - **Material Design** – Estilo visual y componentes de interfaz.
